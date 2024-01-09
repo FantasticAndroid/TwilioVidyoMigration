@@ -1,0 +1,6 @@
+//include ':common', ':quickstart', ':exampleCustomAudioDevice', ':exampleCustomVideoCapturer', ':exampleCustomVideoSink', ':exampleScreenCapturer', ':exampleAdvancedCameraCapturer', ':exampleVideoInvite', ':exampleDataTrack', ':exampleAudioSink'
+//include ':quickStartVidyo'
+include(":network")
+include ':common'
+include ':quickstartKotlin'
+
