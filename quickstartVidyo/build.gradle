@@ -1,0 +1,112 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion versions.compileSdk
+
+
+    defaultConfig {
+        applicationId "com.twilio.video.quickstart.kotlin"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode 1
+        versionName "1.0"
+
+//        buildConfigField("String",
+//                "TWILIO_ACCESS_TOKEN",
+//                "\"${getSecretProperty("TWILIO_ACCESS_TOKEN", "TWILIO_ACCESS_TOKEN")}\"")
+        buildConfigField("String",
+                "TWILIO_ACCESS_TOKEN_SERVER",
+                "\"${getSecretProperty("TWILIO_ACCESS_TOKEN_SERVER", "http://localhost:3000")}\"")
+        buildConfigField("boolean",
+                "USE_TOKEN_SERVER",
+                "${getSecretProperty("USE_TOKEN_SERVER", true)}")
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation":
+                                      "$projectDir/schemas".toString()]
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility versions.java
+        targetCompatibility versions.java
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // Specify that we want to split up the APK based on ABI
+    splits {
+        abi {
+            // Enable ABI split
+            enable true
+
+            // Clear list of ABIs
+            reset()
+
+            // Specify each architecture currently supported by the Video SDK
+            include "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+
+            // Specify that we do not want an additional universal SDK
+            universalApk false
+        }
+    }
+    namespace 'com.twilio.video.quickstart.kotlin'
+    lint {
+        baseline file('lint-baseline.xml')
+        disable 'GradleDependency'
+        warningsAsErrors true
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    kapt {
+        correctErrorTypes = true
+    }
+}
+
+dependencies {
+
+    implementation "com.google.dagger:hilt-android:${versions.hilt}"
+    implementation files('libs/VidyoClient.aar')
+    kapt "com.google.dagger:hilt-android-compiler:${versions.hilt}"
+
+    implementation "androidx.core:core-ktx:1.12.0"
+
+    implementation "com.twilio:audioswitch:${versions.audioSwitch}"
+    implementation "com.twilio:video-android-ktx:${versions.videoAndroid}"
+    implementation "com.android.support.constraint:constraint-layout:${versions.constraintLayout}"
+    implementation "com.koushikdutta.ion:ion:${versions.ion}"
+
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation "com.squareup.okhttp3:okhttp:4.10.0"
+    implementation "com.localebro:okhttpprofiler:1.0.8"
+
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.2"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
+    implementation "androidx.activity:activity-ktx:1.8.0"
+
+
+    //implementation "com.android.support:appcompat-v7:${versions.supportLibrary}"
+    implementation "com.android.support:preference-v14:${versions.supportLibrary}"
+    implementation "com.android.support:design:${versions.supportLibrary}"
+    //implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
