@@ -18,7 +18,6 @@ class AutoConnectRepo(private val apiService: IApiService) {
             autoServiceResponseDTO.mapToRoomInfo(roomName)
 
 
-
         } catch (httpException: HttpException) {
             Log.e(TAG, "getRoomInfo httpException: ${httpException.message()}")
             httpException.printStackTrace()

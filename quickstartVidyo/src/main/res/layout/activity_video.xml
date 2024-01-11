@@ -8,7 +8,23 @@
     android:fitsSystemWindows="true"
     tools:context="com.twilio.video.quickstart.kotlin.VideoActivity">
 
-    <include layout="@layout/content_video"/>
+    <include layout="@layout/content_video" android:visibility="gone"/>
+
+    <FrameLayout
+        android:id="@+id/vidyoFl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        tools:text="Room Details"
+        android:padding="8dp"
+        android:textSize="18sp"
+        android:id="@+id/roomDetailsTv"
+        android:layout_height="wrap_content" />
+
+
+
 
     <LinearLayout
         android:layout_width="wrap_content"

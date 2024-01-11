@@ -8,7 +8,7 @@ android {
 
 
     defaultConfig {
-        applicationId "com.twilio.video.quickstart.kotlin"
+        applicationId "com.vidyo.video.quickstart.kotlin"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode 1
@@ -30,6 +30,7 @@ android {
                                       "$projectDir/schemas".toString()]
             }
         }
+        namespace "com.twilio.video.quickstart.kotlin"
     }
 
     compileOptions {

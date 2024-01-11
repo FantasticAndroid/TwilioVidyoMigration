@@ -7,7 +7,7 @@ import com.vidyo.VidyoClient.Connector.Connector
 
 
 private const val TAG = "VidyoManager"
-class VidyoManager(context : Context, viewId: FrameLayout) {
+class VidyoManager(context : Context, private val viewId: FrameLayout) {
 
     private val mVidyoConnector: Connector
     private val remoteParticipants = 15
@@ -28,8 +28,8 @@ class VidyoManager(context : Context, viewId: FrameLayout) {
      * @param viewId FrameLayout
      * @param roomInfo RoomInfo
      */
-    fun connectToRoom(viewId: FrameLayout, roomInfo: RoomInfo) {
-
+    fun connectToRoom(roomInfo: RoomInfo) {
+        Log.d(TAG, "connectToRoom roomInfo: $roomInfo")
         mVidyoConnector.showViewAt(viewId, 0, 0, viewId.width, viewId.height)
         mVidyoConnector.connectToRoomAsGuest(roomInfo.portal, roomInfo.name, roomInfo.roomKey, roomInfo.roomPin, connectListener)
     }

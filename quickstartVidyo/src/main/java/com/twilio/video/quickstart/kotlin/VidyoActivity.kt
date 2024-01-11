@@ -57,6 +57,7 @@ import com.twilio.video.ktx.createLocalAudioTrack
 import com.twilio.video.ktx.createLocalVideoTrack
 import com.twilio.video.quickstart.kotlin.databinding.ActivityVideoBinding
 import com.twilio.video.quickstart.kotlin.databinding.ContentVideoBinding
+import com.twilio.video.quickstart.kotlin.vidyo.VidyoManager
 import tvi.webrtc.VideoSink
 import java.util.UUID
 import kotlin.collections.ArrayList
@@ -69,7 +70,7 @@ class VidyoActivity : AppCompatActivity() {
 
 
     private val CAMERA_MIC_PERMISSION_REQUEST_CODE = 1
-    private val TAG = "VideoActivity"
+    private val TAG = "VidyoActivity"
     private val CAMERA_PERMISSION_INDEX = 0
     private val MIC_PERMISSION_INDEX = 1
 
@@ -566,6 +567,8 @@ class VidyoActivity : AppCompatActivity() {
         binding = ActivityVideoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        vidyoManager = VidyoManager(this, viewId = binding.vidyoFl)
+
         /*
          * Set local video view to primary view
          */
@@ -639,6 +642,10 @@ class VidyoActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onResume() {
         super.onResume()
+
+        if(true)
+            return
+
         /*
          * If the local video track was released when the app was put in the background, recreate.
          */
@@ -801,7 +808,10 @@ class VidyoActivity : AppCompatActivity() {
     }
 
     private fun setAccessToken() {
-        retrieveAccessTokenfromServer()
+        //retrieveAccessTokenfromServer()
+
+
+
 //        if (!BuildConfig.USE_TOKEN_SERVER) {
 //            /*
 //             * OPTION 1 - Generate an access token from the getting started portal
@@ -1044,12 +1054,35 @@ class VidyoActivity : AppCompatActivity() {
         }
     }
 
+    private lateinit var vidyoManager: VidyoManager
+
+    private fun retrieveAutoRoomConnectDetails(roomName: String){
+        videoViewModel.autoRoomInfoLiveData.observe(this){
+            Toast.makeText(applicationContext, "Room: $it", Toast.LENGTH_LONG).show()
+            Log.d(TAG, "retrieveAutoRoomConnectDetails roomInfo: $it")
+
+            it?.apply {
+
+                val text = "Portal Address: ${portal}\nName: $name\nKey:$roomKey\nPin:$roomPin"
+                binding.roomDetailsTv.text = text
+
+                vidyoManager.connectToRoom(this)
+
+            }?: binding.roomDetailsTv.setText("Room Not Found")
+
+        }
+
+        videoViewModel.getAutoConnectRoomInfo(roomName)
+    }
+
     private fun connectClickListener(roomEditText: EditText): DialogInterface.OnClickListener {
         return DialogInterface.OnClickListener { _, _ ->
             /*
              * Connect to room
              */
-            connectToRoom(roomEditText.text.toString())
+            //connectToRoom(roomEditText.text.toString())
+
+            retrieveAutoRoomConnectDetails(roomEditText.text.toString())
         }
     }
 
